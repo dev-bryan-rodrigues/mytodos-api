@@ -3,14 +3,19 @@ import Project from 'App/Models/Project'
 import ProjectValidator from 'App/Validators/ProjectValidator'
 
 export default class ProjectsController {
-  public async index({}: HttpContextContract) {
-    const projects = Project.all()
+  public async index({ request }: HttpContextContract) {
+    const userId = request.header('user_id')
+    const projects = Project.query().where('user_id', `${userId}`)
     return projects
   }
 
-  public async store({ request }: HttpContextContract) {
+  public async store({ request, auth }: HttpContextContract) {
     const data = await request.validate(ProjectValidator)
-    const project = await Project.create(data)
+
+    const user = await auth.authenticate()
+
+    const project = await Project.create({ userId: user.id, ...data })
+
     return project
   }
 
