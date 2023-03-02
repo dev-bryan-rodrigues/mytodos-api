@@ -1,4 +1,4 @@
-# backend
+# MyTodos - API
 ## Build Setup
 
 Install [Docker Compose](https://docs.docker.com/compose/install/).
